@@ -1,0 +1,98 @@
+﻿        public void OnGet(string id)
+        {
+            if (id == "1")
+            {
+                ViewData["data"] = Data
+                                    .Repository
+                                    
+                                    .GetAllMovies()
+                                    .Where(movie =>  movie.ReleaseYear >= 1990 && movie.ReleaseYear <= 1999)
+                                    .ToList()
+                                    .ToHtmlTable();
+            }
+            else if (id == "2")
+            {
+                ViewData["data"] = Data.Repository
+                .GetAllMovies()
+                .Where(m=>m.Actors.Count() == 3)
+                .ToList()
+                .ToHtmlTable();
+            }
+            else if (id == "3")
+            {
+                ViewData["data"] = Data.Repository
+                .GetAllMovies()
+                .Where(m=>m.Actors.Count(a=>m.ReleaseYear-a.Birthyear > 40) >0)
+                .ToList()
+                .ToHtmlTable();
+            }
+            else if (id == "4")
+            {
+                ViewData["data"] = Data.Repository
+                .GetAllActors()
+                .Where(a=>DateTime.Now.Year-a.Birthyear>50)
+                .OrderBy(a=>a.Name)
+                .ToList()
+                .ToHtmlTable();
+            }
+            else if (id == "5")
+            {
+                ViewData["data"] = Data.Repository
+                .GetAllActors()
+                .Where(a=>a.Name.ToLower().Contains("g"))
+                .ToList()
+                .ToHtmlTable();
+            }
+            else if (id == "6")
+            {
+                ViewData["data"] = Data.Repository
+                .GetAllActors()
+                .Select(e=>new {Name=e.Name, Age=DateTime.Now.Year-e.Birthyear})
+                .ToList()
+                .ToHtmlTable();
+            }
+            else if (id == "7")
+            {
+                ViewData["data"] = Data.Repository
+                .GetAllMovies()
+                .Select(m=>new {Title=m.Title, Director=m.Director, Antal=m.Actors.Count()})
+                .ToList()
+                .ToHtmlTable();
+            }
+            else if (id == "8")
+            {
+                ViewData["data"] = Data.Repository
+                .GetAllMovies()
+                .Select(m=>new {Title=m.Title, Medel=m.Actors.Average(a=>DateTime.Now.Year-a.Birthyear)})
+                .ToList()
+                .ToHtmlTable();
+            }
+            else if (id == "9")
+            {
+                ViewData["data"] = Data.Repository
+                .GetAllMovies()
+                .Where(m=>m.Director == "Martin Scorsese" && m.ReleaseYear > 2000)
+                .Select(m=>new {Title=m.Title, ReleaseYear=m.ReleaseYear, Director=m.Director})
+                .ToList()
+                .ToHtmlTable();
+            }
+            else if (id == "10")
+            {
+                ViewData["data"] = Data.Repository
+                .GetAllActors()
+                .Where(a=>Data.Repository.GetAllMovies().Count(m=>m.Actors.Count(a2=>a2.Id == a.Id)>0)>1)
+                .Select(a=>new {Name=a.Name,Antal=Data.Repository.GetAllMovies().Count(m=>m.Actors.Count(a2=>a2.Id == a.Id)>0) })
+                .ToList()
+                .ToHtmlTable();
+            }
+            else if (id == "11")
+            {
+                 ViewData["data"] = Data.Repository
+                .GetAllMovies()
+                .Where(m=>m.ReleaseYear > Data.Repository.GetAllMovies().Average(m2=>m2.ReleaseYear))
+                .OrderByDescending(m=>m.ReleaseYear)
+                .ToList()
+                .ToHtmlTable();
+           }
+
+        }
